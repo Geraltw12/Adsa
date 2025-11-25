@@ -1,0 +1,790 @@
+  \\ EXE 1 A
+
+/*
+* C Program to Traverse the Tree Recursively
+*/
+#include <stdio.h>
+#include <stdlib.h>
+struct node
+{
+ int a;
+ struct node *left;
+ struct node *right;
+};
+void generate(struct node **, int);
+void infix(struct node *);
+void postfix(struct node *);
+void prefix(struct node *);
+void delete(struct node **);
+int main()
+{
+ struct node *head = NULL;
+ int choice = 0, num, flag = 0, key;
+ do
+ {
+ printf("\nEnter your choice:\n1. Insert\n2. Traverse via inorder\n3.Traverse via
+preorder\n4. Traverse via postorder\n5. Exit\nChoice: ");
+ scanf("%d", &choice);
+ switch(choice)
+ {
+ case 1:
+ printf("Enter element to insert: ");
+ scanf("%d", &num);
+ generate(&head, num);
+ break;
+ case 2:
+ infix(head);
+ break;
+ case 3:
+ prefix(head);
+ break;
+ case 4:
+ postfix(head);
+ break;
+ case 5:
+ delete(&head);
+ printf("Memory Cleared\nPROGRAM TERMINATED\n");
+ break;
+ default: printf("Not a valid input, try again\n");
+ }
+ } while (choice != 5);
+ return 0;
+}
+void generate(struct node **head, int num)
+{
+ struct node *temp = *head, *prev = *head;
+ if (*head == NULL)
+ {
+ *head = (struct node *)malloc(sizeof(struct node));
+ (*head)->a = num;
+ (*head)->left = (*head)->right = NULL;
+ }
+ else
+ {
+ while (temp != NULL)
+ {
+ if (num > temp->a)
+ {
+ prev = temp;
+ temp = temp->right;
+ }
+ else
+ {
+ prev = temp;
+ temp = temp->left;
+ }
+ }
+ temp = (struct node *)malloc(sizeof(struct node));
+ temp->a = num;
+ if (num >= prev->a)
+ {
+ prev->right = temp;
+ }
+ else
+ {
+ prev->left = temp;
+ }
+ }
+}
+void infix(struct node *head)
+{
+ if (head)
+ {
+ infix(head->left);
+ printf("%d ", head->a);
+ infix(head->right);
+ }
+}
+void prefix(struct node *head)
+{
+ if (head)
+ {
+ printf("%d ", head->a);
+ prefix(head->left);
+ prefix(head->right);
+ }
+}
+void postfix(struct node *head)
+{
+ if (head)
+ {
+ postfix(head->left);
+ postfix(head->right);
+ printf("%d ", head->a);
+ }
+}
+void delete(struct node **head)
+{
+ if (*head != NULL)
+ {
+ if ((*head)->left)
+ {
+ delete(&(*head)->left);
+ }
+ if ((*head)->right)
+ {
+ delete(&(*head)->right);
+ }
+ free(*head);
+ }
+}
+
+\\ EXE 1 B 
+
+include <stdio.h>
+int factorial(int n) {
+ //base case
+ if(n == 0) {
+ return 1;
+ } else {
+ return n * factorial(n-1);
+ }
+}
+int fibbonacci(int n) {
+ if(n == 0){
+ return 0;
+ } else if(n == 1) {
+ return 1;
+ } else {
+ return (fibbonacci(n-1) + fibbonacci(n-2));
+ }
+}
+int main() {
+ int n;
+ int i;
+ printf(“Enter a number\n”)
+ scanf(“%d”, &n)
+ printf("Factorial of %d: %d\n" , n , factorial(n));
+ printf("Fibbonacci of %d: " , n);
+ for(i = 0;i<n;i++) {
+ printf("%d ",fibbonacci(i));
+ }
+}
+
+  \\ EXE 2 
+
+#include <stdio.h>
+int a[20];
+int b[20];
+void merging(int low, int mid, int high) {
+ int l1, l2, i;
+ for(l1 = low, l2 = mid + 1, i = low; l1 <= mid && l2 <= high; i++) {
+ if(a[l1] <= a[l2])
+ b[i] = a[l1++];
+ else
+ b[i] = a[l2++];
+ }
+
+ while(l1 <= mid)
+ b[i++] = a[l1++];
+ while(l2 <= high)
+ b[i++] = a[l2++];
+ for(i = low; i <= high; i++)
+ a[i] = b[i];
+}
+void sort(int low, int high) {
+ int mid;
+
+ if(low < high) {
+ mid = (low + high) / 2;
+ sort(low, mid);
+ sort(mid+1, high);
+ merging(low, mid, high);
+ }
+ else {
+ return;
+ }
+}
+int main() {
+ int i,n;
+printf("\n......Merge Sort.....\n");
+printf("\n Enter the no. of elements you want to sort");
+scanf("%d",&n);
+printf("\n Enter the %d elements\n",n);
+for(i=0;i<n;i++)
+scanf("%d",&a[i]);
+ printf("List before sorting\n");
+
+ for(i = 0; i <n; i++)
+ printf("%d ", a[i]);
+ sort(0, n-1);
+ printf("\nElements sorted by Merge sort are\n");
+
+ for(i = 0; i < n; i++)
+ printf("%d ", a[i]);
+}
+
+  \\ EXE 3 
+
+//QUICK SORT IMPLEMENTATION
+#include<stdio.h>
+#include<conio.h>
+int x[100],items,i;
+void main()
+{
+clrscr();
+printf("\n......Quick Sort.....\n");
+printf("\n Enter the no. of elements you want to sort");
+scanf("%d",&items);
+printf("\n Enter the %d elements\n",items);
+for(i=0;i<items;i++)
+scanf("%d",&x[i]);
+sort(0,items-1);
+display();
+getch();
+}
+display()
+{
+printf("\n Elements sorted by quick sort are\n");
+for(i=0;i<items;++i)
+printf("%d\n",x[i]);
+return(0);
+}
+sort(int first,int last)
+{
+int temp,pivot,i,j;
+if(first<last)
+{
+pivot=x[first];
+i=first;
+j=last;
+while(i<j)
+{
+while(x[i]<=pivot&&i<last)
+i++;
+while(x[j]>=pivot&&j>first)
+j--;
+if(i<j)
+{
+temp=x[i];
+x[i]=x[j];
+x[j]=temp;
+}
+}
+temp=x[first];
+x[first]=x[j];
+x[j]=temp;
+sort(first,j-1);
+sort(j+1,last);
+}
+return(0);
+}
+
+  \\ EXE 4 
+
+/*BINARY TREE TRAVERSALS*/
+#include<stdio.h>
+#include<conio.h>
+struct node
+{
+int data;
+struct node *right, *left;
+}*root,*p,*q;
+struct node *make(int y)
+{
+struct node *newnode;
+newnode=(struct node *)malloc(sizeof(struct node));
+newnode->data=y;
+newnode->right=newnode->left=NULL;
+return(newnode);
+}
+void left(struct node *r,int x)
+{
+if(r->left!=NULL)
+printf("\n Invalid !");
+else
+r->left=make(x);
+}
+void right(struct node *r,int x)
+{
+if(r->right!=NULL)
+printf("\n Invalid !");
+else
+r->right=make(x);
+}
+void inorder(struct node *r)
+{
+if(r!=NULL)
+{
+inorder(r->left);
+printf("\t %d",r->data);
+inorder(r->right);
+}
+}
+void preorder(struct node *r)
+{
+if(r!=NULL)
+{
+printf("\t %d",r->data);
+preorder(r->left);
+preorder(r->right);
+}
+}
+void postorder(struct node *r)
+{
+if(r!=NULL)
+{
+postorder(r->left);
+postorder(r->right);
+printf("\t %d",r->data);
+}
+}
+void main()
+{
+int no;
+int choice;
+clrscr();
+printf("\n Enter the root:");
+scanf("%d",& no);
+root=make(no);
+p=root;
+while(1)
+{
+printf("\n Enter another number:");
+scanf("%d",& no);
+if(no==-1)
+break;
+p=root;
+q=root;
+while(no!=p->data && q!=NULL)
+{
+p=q;
+if(no<p->data)
+q=p->left;
+else
+q=p->right;
+}
+if(no<p->data)
+{
+printf("\n Left branch of %d is %d",p->data,no);
+left(p,no);
+}
+else
+{
+right(p,no);
+printf("\n Right Branch of %d is %d",p->data,no);
+}
+}
+while(1)
+{
+printf("\n 1.Inorder Traversal \n 2.Preorder Traversal\n 3.Postorder Traversal\n 4.Exit");
+printf("\n Enter choice:");
+scanf("%d",&choice);
+switch(choice)
+{
+case 1 :inorder(root);
+break;
+case 2 :preorder(root);
+break;
+case 3 :postorder(root);
+break;
+case 4 :exit(0);
+default:printf("Error ! Invalid Choice ");
+break;
+}
+getch();
+}
+}
+
+
+  \\ EXE 5 
+
+#include <stdio.h>
+#include <stdlib.h>
+#define max 20
+void ins(int);
+void heap(int);
+void disp(int);
+int f=0,t=1,h[max];
+int main()
+{
+int n;
+printf("Enter the size of array: ");
+scanf("%d",&n);
+ins(n);
+heap(n);
+disp(n);
+return 0;
+}
+//ins function inserts the accepted input to the heap array.
+void ins(int n)
+{
+int i=0;
+for(;i<n;i++)
+{
+ printf("Enter the element: ");
+ scanf("%d",&h[i]);
+}
+}
+// disp funtion is used display the contents of the array after insertion.
+void disp(int n)
+{
+ printf("Displaying elements in heap \n \n");
+ int i=0;
+ for(;i<n;i++)
+ {
+ printf("%d ",h[i]);
+ }
+printf("\n\n");
+}
+// heap fuction is used to insert the accepted input to the heap.
+void heap(int n)
+{
+int i,v,k=0,j=0,he;
+for(i=n/2;i>=0;i--)
+{
+ j=i;
+ k=j-1;
+ v=h[k];
+ he=f;
+ while(he==f && (2*k)<=n)
+ {
+ j=2*k+1;
+ if(j<n)
+ {
+ if(h[j]<h[j+1])
+ j++;
+ }
+ if(v>=h[j])
+ he=t;
+ else
+ {
+ h[k]=h[j];
+ k=j;
+ }
+ }
+ h[k]=v;
+ }
+}
+
+
+  \\ EXE 6 
+
+#include<stdio.h>
+#include<stdlib.h>
+int key[20],n,m;
+int *ht,index;
+int count = 0;
+void insert(int key)
+{
+index = key % m;
+while(ht[index] != -1)
+{
+index = (index+1)%m;
+}
+ht[index] = key;
+count++;
+}
+void display()
+{
+int i;
+if(count == 0)
+{
+printf("\nHash Table is empty");
+return;
+}
+printf("\nHash Table contents are:\n ");
+for(i=0; i<m; i++)
+printf("\n T[%d] --> %d ", i, ht[i]);
+}
+void main()
+{
+int i;
+printf("\nEnter the number of employee records (N) : ");
+scanf("%d", &n);
+printf("\nEnter the two digit memory locations (m) for hash table: ");
+scanf("%d", &m);
+ht = (int *)malloc(m*sizeof(int));
+for(i=0; i<m; i++)
+ht[i] = -1;
+printf("\nEnter the four digit key values (K) for N Employee Records:\n ");
+for(i=0; i<n; i++)
+scanf("%d", &key[i]);
+for(i=0;i<n;i++)
+{
+if(count == m)
+{
+printf("\n~~~Hash table is full. Cannot insert the record %d
+key~~~",i+1);
+break;
+}
+insert(key[i]);
+}
+//Displaying Keys inserted into hash table
+display();
+}
+
+
+  \\ EXE 7 
+
+#include<stdio.h>
+#include<stdlib.h>
+int key[20],n,m;
+int *ht,index;
+int count = 0;
+void insert(int key)
+{
+index = key % m;
+while(ht[index] != -1)
+{
+index = (index+1)%m;
+}
+ht[index] = key;
+count++;
+}
+void display()
+{
+int i;
+if(count == 0)
+{
+printf("\nHash Table is empty");
+return;
+}
+printf("\nHash Table contents are:\n ");
+for(i=0; i<m; i++)
+printf("\n T[%d] --> %d ", i, ht[i]);
+}
+void main()
+{
+int i;
+printf("\nEnter the number of employee records (N) : ");
+scanf("%d", &n);
+printf("\nEnter the two digit memory locations (m) for hash table: ");
+scanf("%d", &m);
+ht = (int *)malloc(m*sizeof(int));
+for(i=0; i<m; i++)
+ht[i] = -1;
+printf("\nEnter the four digit key values (K) for N Employee Records:\n ");
+for(i=0; i<n; i++)
+scanf("%d", &key[i]);
+for(i=0;i<n;i++)
+{
+if(count == m)
+{
+printf("\n~~~Hash table is full. Cannot insert the record %d
+key~~~",i+1);
+break;
+}
+insert(key[i]);
+}
+//Displaying Keys inserted into hash table
+display();
+}
+
+
+  \\ EXE 8 
+
+#include <stdio.h>
+#include <limits.h>
+#define vertices 5 /*Define the number of vertices in the graph*/
+/* create minimum_key() method for finding the vertex that has minimum keyvalue and that is not added in MST yet */
+int minimum_key(int k[], int mst[])
+{
+int minimum = INT_MAX, min,i;
+/*iterate over all vertices to find the vertex with minimum key-value*/
+for (i = 0; i < vertices; i++)
+if (mst[i] == 0 && k[i] < minimum )
+minimum = k[i], min = i;
+return min;
+}
+/* create prim() method for constructing and printing the MST.
+The g[vertices][vertices] is an adjacency matrix that defines the graph for MST.*/
+void prim(int g[vertices][vertices])
+{
+/* create array of size equal to total number of vertices for storing the MST*/
+int parent[vertices];
+/* create k[vertices] array for selecting an edge having minimum weight*/
+int k[vertices];
+int mst[vertices];
+int i, count,edge,v; /*Here 'v' is the vertex*/
+for (i = 0; i < vertices; i++)
+{
+k[i] = INT_MAX;
+mst[i] = 0;
+}
+k[0] = 0; /*It select as first vertex*/
+parent[0] = -1; /* set first value of parent[] array to -1 to make it root of MST*/
+for (count = 0; count < vertices-1; count++)
+{
+/*select the vertex having minimum key and that is not added in the MST yet fro
+m the set of vertices*/
+ edge = minimum_key(k, mst);
+mst[edge] = 1;
+for (v = 0; v < vertices; v++)
+{
+if (g[edge][v] && mst[v] == 0 && g[edge][v] < k[v])
+{
+parent[v] = edge, k[v] = g[edge][v];
+}
+}
+}
+/*Print the constructed Minimum spanning tree*/
+printf("\n Edge \t Weight\n");
+for (i = 1; i < vertices; i++)
+printf(" %d <-> %d %d \n", parent[i], i, g[i][parent[i]]);
+}
+int main()
+{
+int g[vertices][vertices] = {{0, 0, 3, 0, 0},
+{0, 0, 10, 4, 0},
+{3, 10, 0, 2, 6},
+{0, 4, 2, 0, 1},
+{0, 0, 6, 1, 0},
+};
+prim(g);
+return 0;
+}
+
+
+  \\ EXE 9 
+
+/*DIJKSTRA’S SHORTEST PATH ALGORITHM*/
+#include<stdio.h>
+#include<conio.h>
+#include<ctype.h>
+#define MAX 30
+#define UNVISITED -1
+#define VISITED 1
+#define INFINITY 32767
+intadjMat[MAX][MAX],n;
+voidviewAdjMat();
+voidviewPathMat(int pm[MAX],intn,intlen);
+intsearchPath(intsrc,intdes,intpathMat[MAX],int *minLen);
+typedefstruct
+{
+ intprevious,len,status;
+}node;
+void main()
+{
+charch,s,d;
+inti,j,k,src,des,minLen,tot,pathMat[MAX];
+clrscr();
+printf(“\n DIJKSTRA’S SHORTEST PATH ALGORITHM”);
+printf("\n\N Enter total number of vertex:");
+scanf("%d",&n);
+printf("\n\n************ADJACENCY MATRIX********\n\n");
+for(i=1;i<=n;i++)
+for(j=1;j<=n;j++)
+scanf("%d",&adjMat[i][j]);
+while(1)
+{
+printf("\n\n Enter the source node :");
+fflush(stdin);
+scanf("%c",&s);
+printf("\n\n Enter the destination node :");
+fflush(stdin);
+scanf("%c",&d);
+src=toupper(s)-64;
+des=toupper(d)-64;
+tot=searchPath(src,des,pathMat,&minLen);
+viewPathMat(pathMat,tot,minLen);
+printf("\n Do you want to continue(y/n):");
+ch=getche();
+if(ch!='y' &&ch!='Y')
+break;} }
+voidviewPathMat(int pm[MAX],intn,intlen)
+{
+int k;
+if(len!=0)
+{
+printf("\n Minimum length is:%d\n\n Shortest Path is:",len);
+for(k=n;k>1;k--)
+printf("%c-->",pm[k]+64);printf("%c\n",pm[k]+64);
+printf("\n Distance is : ");
+for(k=n;k>1;k--)
+{
+printf("%d ",adjMat[pm[k]] [pm[k-1]]);
+}
+else
+printf("\n NO path from source to destination node \n");
+}
+intsearchPath(intsrc,intdes,intpathMat[MAX],int *minLen)
+{
+node graph[MAX];
+inti,k,min,tot=0,curVertex,newLen,u,v;
+*minLen=0;
+for(i=1;i<=n;i++)
+{
+graph[i].previous=0;graph[i].len=INFINITY;
+graph[i].status=UNVISITED;
+}
+graph[src].previous=0;graph[src].len=0;
+graph[src].status=VISITED;curVertex=src;
+while(curVertex!=des){
+for(k=1;k<=n;k++){
+if(adjMat[curVertex][k]>0 && graph[k].status==UNVISITED){
+newLen=graph[curVertex].len+adjMat[curVertex][k];
+if(newLen<graph[k].len){
+graph[k].previous=curVertex;
+graph[k].len=newLen;
+}
+}}
+min=INFINITY;curVertex=0;
+for(i=1;i<=n;i++)
+if(graph[i].status==UNVISITED && graph[i].len<min){
+min=graph[i].len;curVertex=i;
+}
+if(curVertex==0) return 0;
+graph[curVertex].status=VISITED;
+}
+while(curVertex!=0){
+pathMat[++tot]=curVertex;
+curVertex=graph[curVertex].previous;
+}
+for(i=tot;i>1;i--){
+u=pathMat[i];v=pathMat[i-1];
+*minLen=*minLen+adjMat[u][v];
+}
+return(tot); }
+
+
+  \\ EXE 10 
+
+
+/*WARSHALL’S ALGORITHM*/
+#include<stdio.h>
+#define MAX 20
+void display(int matrix[MAX][MAX],int n)
+{
+int i,j;
+for(i=0;i<n;i++)
+{
+for(j=0;j<n;j++)
+printf("%3d",matrix[i][j]);
+printf("\n");
+}
+}
+void main()
+{
+int i,j,k,n;
+int w_adj[MAX][MAX],adj[MAX][MAX],path[MAX][MAX];
+clrscr();
+printf("Enter the number of vertices:");
+scanf("%d",&n);
+for(i=0;i<n;i++)
+for(j=0;j<n;j++)
+printf("Enter weighted adjacency matrix:\n");
+scanf("%d",&w_adj[i][j]);
+printf("The weighted adjacency matrix is:\n");
+display(w_adj,n);
+for(i=0;i<n;i++)
+for(j=0;j<n;j++)
+if(w_adj[i][j]==0)
+adj[i][j]=0;
+else
+adj[i][j]=1;
+printf("The adjacency matrix is:\n");
+display(adj,n);
+for(i=0;i<n;i++)
+for(j=0;j<n;j++)
+path[i][j]=adj[i][j];
+for(k=0;k<n;k++)
+{
+for(i=0;i<n;i++)
+for(j=0;j<n;j++)
+path[i][j]=(path[i][k] && path[k][j]);
+}
+printf("Path matrix of the given graph is:\n");
+display(path,n);
+getch();
+}
