@@ -1,0 +1,549 @@
+\\EXE 1 
+
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node {
+    int data;
+    struct node *left, *right;
+};
+
+struct node* insert(struct node *root, int val) {
+    if (root == NULL) {
+root = (struct node*) malloc(sizeof(struct node));
+
+        root->data = val;
+        root->left = root->right = NULL;
+        return root;
+    }
+    if (val < root->data)
+        root->left = insert(root->left, val);
+    else
+        root->right = insert(root->right, val);
+
+    return root;
+}
+
+void inorder(struct node *root) {
+    if (root) {
+        inorder(root->left);
+        printf("%d ", root->data);
+        inorder(root->right);
+    }
+}
+
+void preorder(struct node *root) {
+    if (root) {
+        printf("%d ", root->data);
+        preorder(root->left);
+        preorder(root->right);
+    }
+}
+
+void postorder(struct node *root) {
+    if (root) {
+        postorder(root->left);
+        postorder(root->right);
+        printf("%d ", root->data);
+    }
+}
+
+void clearTree(struct node *root) {
+    if (root) {
+        clearTree(root->left);
+        clearTree(root->right);
+        free(root);
+    }
+}
+
+int main() {
+    struct node *root = NULL;
+    int choice, val;
+
+    do {
+        printf("\n1.Insert\n2.Traverse via Inorder\n3.Traverse via Preorder\n4.Traverse via Postorder\n5.Exit\nChoice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Enter value: ");
+                scanf("%d", &val);
+                root = insert(root, val);
+                break;
+
+            case 2:
+                inorder(root); 
+                printf("\n");
+                break;
+
+            case 3:
+                preorder(root); 
+                printf("\n");
+                break;
+
+            case 4:
+                postorder(root); 
+                printf("\n");
+                break;
+
+            case 5:
+                clearTree(root);
+                printf("Memory cleared. Exiting...\n");
+                break;
+
+            default:
+                printf("Invalid choice.\n");
+        }
+
+    } while (choice != 5);
+
+    return 0;
+}
+
+	\\ EXE 1 B
+
+#include <stdio.h>
+
+int factorial(int n) {
+    if (n == 0)
+        return 1;
+    else
+        return n * factorial(n - 1);
+}
+
+int fibbonacci(int n) {
+    if (n == 0)
+        return 0;
+    else if (n == 1)
+        return 1;
+    else
+        return fibbonacci(n - 1) + fibbonacci(n - 2);
+}
+
+int main() {
+    int n, i;
+
+    printf("Enter a number\n");
+    scanf("%d", &n);
+
+    printf("Factorial of %d: %d\n", n, factorial(n));
+
+    printf("Fibbonacci of %d: ", n);
+    for (i = 0; i < n; i++) {
+        printf("%d ", fibbonacci(i));
+    }
+
+    return 0;
+}
+
+
+	\\ EXE 2 
+
+#include <stdio.h>
+
+int a[60];
+int b[60];
+
+// Function prototypes
+void merging(int low, int mid, int high);
+void sort(int low, int high);
+
+void merging(int low, int mid, int high) {
+    int l1 = low, l2 = mid + 1, i = low;
+
+    while (l1 <= mid && l2 <= high) {
+        if (a[l1] <= a[l2])
+            b[i++] = a[l1++];
+        else
+            b[i++] = a[l2++];
+    }
+
+    while (l1 <= mid)
+        b[i++] = a[l1++];
+    while (l2 <= high)
+        b[i++] = a[l2++];
+
+    for (i = low; i <= high; i++)
+        a[i] = b[i];
+}
+
+void sort(int low, int high) {
+    if (low < high) {
+        int mid = (low + high) / 2;
+        sort(low, mid);
+        sort(mid + 1, high);
+        merging(low, mid, high);
+    }
+}
+
+int main() {
+    int n, i;
+
+    printf("\n......Merge Sort.....\n");
+    printf("Enter the number of elements you want to sort: ");
+    scanf("%d", &n);
+
+    printf("Enter the %d elements:\n", n);
+    for (i = 0; i < n; i++)
+        scanf("%d", &a[i]);
+
+    printf("List before sorting:\n");
+    for (i = 0; i < n; i++)
+        printf("%d ", a[i]);
+
+    sort(0, n - 1);
+
+    printf("\n\nElements sorted by Merge Sort:\n");
+    for (i = 0; i < n; i++)
+        printf("%d ", a[i]);
+
+    return 0;
+}
+ 	
+
+	\\ EXE 3
+
+#include <stdio.h>
+
+int x[100], items, i;
+
+// Function prototypes
+void sort(int first, int last);
+void display();
+
+int main() {
+    printf("\n......Quick Sort (Descending).....\n");
+    printf("Enter the number of elements you want to sort: ");
+    scanf("%d", &items);
+
+    printf("Enter the %d elements:\n", items);
+    for (i = 0; i < items; i++)
+        scanf("%d", &x[i]);
+
+    sort(0, items - 1);
+    display();
+
+    return 0;
+}
+
+void display() {
+    int i;
+    printf("\nElements sorted by Quick Sort (Descending):\n");
+    for (i = 0; i < items; i++)
+        printf("%d\n", x[i]);
+}
+
+void sort(int first, int last) {
+    int temp, pivot, i, j;
+
+    if (first < last) {
+        pivot = x[first];
+        i = first;
+        j = last;
+
+        while (i < j) {
+            while (x[i] >= pivot && i < last)  // flipped <= to >=
+                i++;
+            while (x[j] < pivot)              // flipped >= to <
+                j--;
+
+            if (i < j) {
+                temp = x[i];
+                x[i] = x[j];
+                x[j] = temp;
+            }
+        }
+
+        temp = x[first];
+        x[first] = x[j];
+        x[j] = temp;
+
+        sort(first, j - 1);
+        sort(j + 1, last);
+    }
+}
+
+
+	\\ EXE 4 
+
+#include <stdio.h>
+#include <stdlib.h> // for malloc, exit
+
+struct node {
+    int data;
+    struct node *left, *right;
+} *root, *p, *q;
+
+struct node* make(int y) {
+    struct node* newnode = (struct node*)malloc(sizeof(struct node));
+    newnode->data = y;
+    newnode->left = newnode->right = NULL;
+    return newnode;
+}
+
+void left(struct node* r, int x) {
+    if (r->left != NULL)
+        printf("\nInvalid!");
+    else
+        r->left = make(x);
+}
+
+void right(struct node* r, int x) {
+    if (r->right != NULL)
+        printf("\nInvalid!");
+    else
+        r->right = make(x);
+}
+
+void inorder(struct node* r) {
+    if (r != NULL) {
+        inorder(r->left);
+        printf("%d ", r->data);
+        inorder(r->right);
+    }
+}
+
+void preorder(struct node* r) {
+    if (r != NULL) {
+        printf("%d ", r->data);
+        preorder(r->left);
+        preorder(r->right);
+    }
+}
+
+void postorder(struct node* r) {
+    if (r != NULL) {
+        postorder(r->left);
+        postorder(r->right);
+        printf("%d ", r->data);
+    }
+}
+
+int main() {
+    int no, choice;
+
+    printf("Enter the root: ");
+    scanf("%d", &no);
+    root = make(no);
+
+    while (1) {
+        printf("\nEnter another number (-1 to stop): ");
+        scanf("%d", &no);
+        if (no == -1)
+            break;
+
+        p = root;
+        q = root;
+
+        while (q != NULL) {
+            p = q;
+            if (no < p->data)
+                q = p->left;
+            else
+                q = p->right;
+        }
+
+        if (no < p->data) {
+            printf("Left branch of %d is %d\n", p->data, no);
+            left(p, no);
+        } else {
+            printf("Right branch of %d is %d\n", p->data, no);
+            right(p, no);
+        }
+    }
+
+    while (1) {
+        printf("\n1. Inorder Traversal\n2. Preorder Traversal\n3. Postorder Traversal\n4. Exit\nEnter choice: ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                printf("Inorder Traversal: ");
+                inorder(root);
+                printf("\n");
+                break;
+            case 2:
+                printf("Preorder Traversal: ");
+                preorder(root);
+                printf("\n");
+                break;
+            case 3:
+                printf("Postorder Traversal: ");
+                postorder(root);
+                printf("\n");
+                break;
+            case 4:
+                exit(0);
+            default:
+                printf("Error! Invalid choice\n");
+        }
+    }
+
+    return 0;
+}
+
+
+	\\ EXE 5 
+
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX 20
+
+void heapify(int arr[], int n, int i) {
+    int largest = i; // Initialize largest as root
+    int l = 2*i + 1; // left child
+    int r = 2*i + 2; // right child
+    int temp;
+
+    // If left child is larger than root
+    if (l < n && arr[l] > arr[largest])
+        largest = l;
+
+    // If right child is larger than largest so far
+    if (r < n && arr[r] > arr[largest])
+        largest = r;
+
+    // If largest is not root
+    if (largest != i) {
+        temp = arr[i];
+        arr[i] = arr[largest];
+        arr[largest] = temp;
+
+        // Recursively heapify the affected sub-tree
+        heapify(arr, n, largest);
+    }
+}
+
+void heapSort(int arr[], int n) {
+    int temp;
+
+    // Build max heap
+    for (int i = n/2 - 1; i >= 0; i--)
+        heapify(arr, n, i);
+
+    // Extract elements from heap one by one
+    for (int i = n-1; i >= 0; i--) {
+        // Move current root to end
+        temp = arr[0];
+        arr[0] = arr[i];
+        arr[i] = temp;
+
+        // call max heapify on the reduced heap
+        heapify(arr, i, 0);
+    }
+}
+
+void disp(int arr[], int n) {
+    printf("\nArray elements:\n");
+    for (int i = 0; i < n; i++)
+        printf("%d ", arr[i]);
+    printf("\n");
+}
+
+int main() {
+    int h[MAX], n;
+
+    printf("Enter the size of array (max 20): ");
+    scanf("%d", &n);
+
+    if(n > MAX) {
+        printf("Size exceeds max limit!\n");
+        return 1;
+    }
+
+    for(int i = 0; i < n; i++) {
+        printf("Enter element %d: ", i+1);
+        scanf("%d", &h[i]);
+    }
+
+    printf("\nBefore sorting:\n");
+    disp(h, n);
+
+    heapSort(h, n);
+
+    printf("\nAfter heap sort (ascending order):\n");
+    disp(h, n);
+
+    return 0;
+}
+
+
+	\\ EXE 6
+
+#include <stdio.h>
+#include <stdlib.h>
+
+int key[20], n, m;
+int *ht;
+int count = 0;
+
+// Insert function using linear probing
+void insert(int keyVal) {
+    int index = keyVal % m;
+    int startIndex = index;
+
+    while(ht[index] != -1) {
+        index = (index + 1) % m;
+        if(index == startIndex) { // Full table
+            printf("\nHash table is full. Cannot insert key %d\n", keyVal);
+            return;
+        }
+    }
+    ht[index] = keyVal;
+    count++;
+}
+
+// Display hash table
+void display() {
+    if(count == 0) {
+        printf("\nHash Table is empty\n");
+        return;
+    }
+
+    printf("\nHash Table contents are:\n");
+    for(int i = 0; i < m; i++) {
+        if(ht[i] != -1)
+            printf("T[%d] --> %d\n", i, ht[i]);
+        else
+            printf("T[%d] --> EMPTY\n", i);
+    }
+}
+
+int main() {
+    printf("Enter the number of employee records (N): ");
+    scanf("%d", &n);
+    printf("Enter the hash table size (m): ");
+    scanf("%d", &m);
+
+    ht = (int*)malloc(m * sizeof(int));
+    for(int i = 0; i < m; i++)
+        ht[i] = -1;
+
+    printf("Enter %d four-digit key values:\n", n);
+    for(int i = 0; i < n; i++)
+        scanf("%d", &key[i]);
+
+    for(int i = 0; i < n; i++) {
+        if(count == m) {
+            printf("\nHash table is full. Cannot insert record %d (key: %d)\n", i+1, key[i]);
+            break;
+        }
+        insert(key[i]);
+    }
+
+    // Display hash table
+    display();
+
+    free(ht);
+    return 0;
+}
+
+	
+
+
+
+
+
+
+
+
